@@ -1,6 +1,5 @@
 from airflow import DAG
 from datetime import datetime
-from airflow.models.baseoperator import chain
 
 from includes.tasks import *
 
