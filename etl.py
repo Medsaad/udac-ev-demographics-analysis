@@ -7,7 +7,7 @@ from airflow.providers.amazon.aws.hooks.base_aws import AwsBaseHook
 ##############################################
 aws = AwsBaseHook(aws_conn_id='udac-conn')
 cred = aws.get_credentials()
-print(f"cres >> {cred}")
+
 spark = SparkSession \
         .builder \
         .appName("Wrangling Data") \

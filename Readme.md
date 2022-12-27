@@ -30,6 +30,8 @@ You can find provided data below under `data` folder. Please upload them to your
 
 - After transformation data gets uploaded again in the same bucket inside `output` folder.
 
+- **Note**: There is a python notebook in this repo to work through the steps above seperately.
+
 - Next step extracts data from S3 and copy it to a created redshift table `vehicles_analytics`.
 
 - The final table will include the following columns:
