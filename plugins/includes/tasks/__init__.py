@@ -1,3 +1,2 @@
-from includes.tasks.transform_tables import transform_tables
-from includes.tasks.data_quality_check import data_quality_check
+from includes.tasks.transform_data import transform_data
 from includes.tasks.from_s3_to_redshift import move_data_to_warehouse

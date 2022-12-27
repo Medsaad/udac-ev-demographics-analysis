@@ -8,8 +8,10 @@ def move_data_to_warehouse(dag):
         s3_bucket=S3_BUCKET,
         s3_key=f"{S3_PREFIX}",
         schema="public",
-        table="vehicles",
+        table="vehicle_analytics",
         copy_options=['parquet'],
         task_id='move_data_to_warehouse',
+        redshift_conn_id='redshift-conn',
+        aws_conn_id='udac-conn',
         dag=dag
         )
