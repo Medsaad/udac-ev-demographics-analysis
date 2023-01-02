@@ -14,6 +14,6 @@ def transform_data(dag):
         executor_memory='2g',
         driver_memory='2g',
         name='transform_data',
-        execution_timeout=timedelta(minutes=10),
+        execution_timeout=timedelta(minutes=15),
         dag=dag
     )

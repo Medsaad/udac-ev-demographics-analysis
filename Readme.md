@@ -10,6 +10,32 @@ You can find provided data below under `data` folder. Please upload them to your
 - `us_population`: contains USA population by state.
 - `state_code`: maps each state name with its code.
 
+## Input data schema
+
+The input data has a snowflake schema since the us population table needed to be joined with us state code table.
+
+![Input Data](https://drive.google.com/uc?id=1NfeOGWalJv24arqy7Vn64HJejNM4P0f6)
+
+For this study, I think monthly input updates would be optimal to get up to date results.
+
+**Notes**
+
+- In case of huge spike of EV adoption in the coming years, the population input code increase dramatically. Then it would be better to switch spark from local mode to a standalone mode with multiple executors and cores in place. It can be self hosted on AWS EC2 or using AWS EMR.
+- Since the increase will only happen in the `Electric_Vehicle_Population_Data` table. It may be helpful in the future if this proccessing part was split out and started in paralell with other tables processing and then all of them got merged together after the quality check.
+
+## Output data schema
+
+The output schema got denormalized so that analytics team can extract insights without the need for joins. You can find the exported columns at the end of this file.
+
+# Tools Used
+
+In this project, I've used a set of tools to get this job done:
+
+- **AWS S3**: used as the project state storage tool from input data storage to a medium between steps.
+- **AWS Redshift**: used as the analytics tool and the residence of the final shape of data.
+- **Apache Airflow**: divides the project steps to logical modules to facilitate error tracking and improve reusablity.
+- **Apache Spark**: A tool to transform data and process it .. also used for all analytics checks.
+
 # How To setup
 
 - Create a redshift cluster and then create a new table `vehicles_analytics`
@@ -34,18 +60,20 @@ You can find provided data below under `data` folder. Please upload them to your
 
 - Next step extracts data from S3 and copy it to a created redshift table `vehicles_analytics`.
 
-- The final table will include the following columns:
-  - country
-  - state
-  - model
-  - electric_vehicle_type
-  - population
-  - ratio
-  - model_name
-  - year
-  - transmission_type
-  - engine_type
-  - engine_size
-  - manufacturer
-  - category
-  - fuel
+- Here is a data dictionary of the output:
+
+| Column | Data Type | Example | Source |
+|:------:|:------:   | :------:|:------:|
+| state | string | "WA"  | us_population |
+| model_name | string | "optima"  | Light_Duty_Vehicles |
+| electric_vehicle_type | string | "Battery Electric Vehicle"  | Light_Duty_Vehicles |
+| model_year | number | 2011  | Light_Duty_Vehicles |
+| manufacturer | string | "Audi"  | ev_population |
+| population | number | 20,123 | us_population |
+| ratio | float | 4.1  | (generated) |
+| transmission_type | string | "Auto"  | Light_Duty_Vehicles |
+| engine_type | string | "SI"  | Light_Duty_Vehicles |
+| engine_size | string | "3.5L"  | Light_Duty_Vehicles |
+| category | string | "Sedan/Wagon"  | Light_Duty_Vehicles |
+| fuel | string | "Hybrid Electric"  | Light_Duty_Vehicles |
+
