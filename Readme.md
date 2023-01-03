@@ -1,6 +1,6 @@
 # EV Analytics
 
-This analytics DAG extracts EV purchases dta across united states and clean these data and add them together in one Redshift table to be ready for geographic analytics.
+This analytics DAG extracts EV purchases data across united states in 2020 and clean these data and add them together in one Redshift table to be ready for geographic analytics.
 
 # Provided Data
 
@@ -22,6 +22,8 @@ For this study, I think monthly input updates would be optimal to get up to date
 
 - In case of huge spike of EV adoption in the coming years, the population input code increase dramatically. Then it would be better to switch spark from local mode to a standalone mode with multiple executors and cores in place. It can be self hosted on AWS EC2 or using AWS EMR.
 - Since the increase will only happen in the `Electric_Vehicle_Population_Data` table. It may be helpful in the future if this proccessing part was split out and started in paralell with other tables processing and then all of them got merged together after the quality check.
+- Once there are enough up-to-date data enough for a daily DAG runs, that will not have a huge technical impact other than the spike of if cloud resources usage and cost.
+- At the time of writing this docs, AWS allows up to 500 redshift connections. There are up to 50 concurrent queries and anything above that will be queued until one of the slots is empty.
 
 ## Output data schema
 
@@ -60,6 +62,8 @@ In this project, I've used a set of tools to get this job done:
 
 - Next step extracts data from S3 and copy it to a created redshift table `vehicles_analytics`.
 
+- Check [this sample result](data/sample/ev_logs_by_city.csv) when querying EV distribution by city. You can also find this inside the python notebook.
+
 - Here is a data dictionary of the output:
 
 | Column | Data Type | Example | Source |
@@ -76,4 +80,3 @@ In this project, I've used a set of tools to get this job done:
 | engine_size | string | "3.5L"  | Light_Duty_Vehicles |
 | category | string | "Sedan/Wagon"  | Light_Duty_Vehicles |
 | fuel | string | "Hybrid Electric"  | Light_Duty_Vehicles |
-
